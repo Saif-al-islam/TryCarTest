@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation.xml"
+    app:startDestination="@id/postsFragment">
+
+    <fragment
+        android:id="@+id/postsFragment"
+        android:name="com.saif.trycartest.presentation.posts.PostsFragment"
+        android:label="fragment_posts"
+        tools:layout="@layout/fragment_posts" >
+        <action
+            android:id="@+id/action_postsFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoritePostsFragment"
+        android:name="com.saif.trycartest.FavoritePostsFragment"
+        android:label="fragment_favorite_posts"
+        tools:layout="@layout/fragment_favorite_posts" />
+
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        android:name="com.saif.trycartest.PostDetailsFragment"
+        android:label="fragment_post_details"
+        tools:layout="@layout/fragment_post_details" >
+        <argument
+            android:name="post"
+            app:argType="com.saif.trycartest.domain.models.Post" />
+    </fragment>
+</navigation>

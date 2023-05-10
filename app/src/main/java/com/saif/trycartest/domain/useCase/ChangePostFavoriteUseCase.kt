@@ -1,16 +1,16 @@
 package com.saif.trycartest.domain.useCase
 
 import com.saif.trycartest.domain.core.BaseUseCase
+import com.saif.trycartest.domain.models.Post
 import com.saif.trycartest.domain.repo.GeneralRepository
 import javax.inject.Inject
 
-class GetLocalFavoritePosts @Inject constructor(
+class ChangePostFavoriteUseCase @Inject constructor(
     private val repository: GeneralRepository
-) : BaseUseCase()  {
+) : BaseUseCase() {
 
-    operator fun invoke() = startFlow({
-        repository.getLocalFavoritePosts()
+    operator fun invoke(post: Post) = startFlow({
+        repository.changePostFavorite(post)
     })
-
 
 }

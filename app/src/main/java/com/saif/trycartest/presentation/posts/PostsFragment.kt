@@ -3,11 +3,15 @@ package com.saif.trycartest.presentation.posts
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.saif.trycartest.R
 import com.saif.trycartest.databinding.FragmentPostsBinding
+import com.saif.trycartest.domain.models.Post
 import com.saif.trycartest.presentation.adapter.PostAdapter
 import com.saif.trycartest.presentation.core.BaseFragment
 import com.saif.trycartest.presentation.core.Error
@@ -35,19 +39,33 @@ class PostsFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        val isConnected = checkInternetConnection(requireContext())
+        if (!isConnected)
+            Error.ErrorInt(R.string.no_internet_connection).showSnackMsg(binding.root)
+    }
+
     private fun setUp() {
         val isConnected = checkInternetConnection(requireContext())
         viewModel.getPosts(isConnected)
-        if (isConnected)
-            Error.ErrorInt(R.string.no_internet_connection).showSnackMsg(binding.root)
 
         setUi()
         observeData()
     }
 
     private fun setUi() {
-        adapter = PostAdapter()
+        adapter = PostAdapter(::onItemClick)
         binding.rv.adapter = adapter
+    }
+
+    private fun onItemClick(post: Post) {
+        findNavController().navigate(
+            PostsFragmentDirections.actionPostsFragmentToPostDetailsFragment(
+                post
+            )
+        )
     }
 
     private fun observeData() {
@@ -60,6 +78,8 @@ class PostsFragment : BaseFragment() {
             when (it) {
                 is SuccessPostsData -> {
                     adapter.submitList(it.data)
+                    binding.tvEmptyList.visibility =
+                        if (it.data.isNullOrEmpty()) VISIBLE else GONE
                 }
             }
         }

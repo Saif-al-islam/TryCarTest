@@ -1,8 +1,10 @@
 package com.saif.trycartest.data.models
 
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.saif.trycartest.domain.models.Post
 
@@ -17,7 +19,9 @@ data class PostDto(
     val title: String?,
     @SerializedName("userId")
     val userId: Int?,
-    val isFav: Boolean = false
+    @Expose(serialize = false, deserialize = false)
+    @ColumnInfo(defaultValue = "0")
+    val isFav: Int
 )
 
-fun PostDto.mapTo() = Post(body = body, id = id, title = title, userId = userId)
+fun PostDto.mapTo() = Post(body = body, id = id, title = title, userId = userId, isFav = isFav)

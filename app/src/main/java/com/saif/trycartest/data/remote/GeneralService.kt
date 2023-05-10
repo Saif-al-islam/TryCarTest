@@ -10,7 +10,7 @@ interface GeneralService {
     @GET("posts")
     suspend fun getPosts(): List<PostDto>
 
-    @GET("posts/{postId}}/comments")
+    @GET("posts/{postId}/comments")
     suspend fun getPostComments(@Path("postId") postId: Int): List<CommentDto>
 
 }

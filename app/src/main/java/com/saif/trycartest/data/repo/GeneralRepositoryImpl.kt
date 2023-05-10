@@ -1,5 +1,6 @@
 package com.saif.trycartest.data.repo
 
+import android.util.Log
 import com.saif.trycartest.data.core.BaseRepository
 import com.saif.trycartest.data.models.PostDto
 import com.saif.trycartest.data.models.mapTo
@@ -36,7 +37,43 @@ class GeneralRepositoryImpl @Inject constructor(
         return Resource.Success(postDao.getAllFavPosts().map { it.mapTo() })
     }
 
-    override suspend fun insertFavPost(post: Post) {
-        postDao.insertPosts(PostDto(title = post.title, body = post.body, id = post.id, userId = post.userId, isFav = true))
+    // dont change the favorite ones
+    override suspend fun insertNewPosts(vararg posts: Post): Resource<Unit> {
+        val favList = postDao.getAllFavPosts()
+        val newPosts = posts.dropWhile { post -> favList.find { it.id == post.id } != null }
+
+        val ids = postDao.insertPosts(
+            *newPosts.map { post ->
+                PostDto(
+                    title = post.title,
+                    body = post.body,
+                    id = post.id,
+                    userId = post.userId,
+                    isFav = post.isFav
+                )
+            }.toTypedArray()
+        )
+
+        return Resource.Success(Unit)
+    }
+
+    override suspend fun changePostFavorite(post: Post): Resource<Unit> {
+        postDao.insertPosts(
+            PostDto(
+                title = post.title,
+                body = post.body,
+                id = post.id,
+                userId = post.userId,
+                isFav = post.isFav
+            )
+        )
+
+        return Resource.Success(Unit)
+    }
+
+    override suspend fun isPostFavorite(postId: Int): Resource<Int> {
+        val isF = postDao.isPostFavorite(postId)
+        Log.d("saif", "isPostFavorite: isF=${isF.isFav}")
+        return Resource.Success(isF.isFav)
     }
 }

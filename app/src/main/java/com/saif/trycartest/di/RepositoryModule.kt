@@ -2,6 +2,7 @@ package com.saif.trycartest.di
 
 
 import com.saif.trycartest.data.remote.GeneralService
+import com.saif.trycartest.data.remote.PostDao
 import com.saif.trycartest.data.repo.GeneralRepositoryImpl
 import com.saif.trycartest.domain.repo.GeneralRepository
 import dagger.Module
@@ -19,7 +20,8 @@ class RepositoryModule {
     @Singleton
     fun provideGeneralRepository(
         api: GeneralService,
-    ): GeneralRepository = GeneralRepositoryImpl(api)
+        postDao: PostDao,
+    ): GeneralRepository = GeneralRepositoryImpl(api, postDao)
 
 
 }

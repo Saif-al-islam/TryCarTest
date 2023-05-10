@@ -14,7 +14,11 @@ interface GeneralRepository {
 
     suspend fun getLocalFavoritePosts(): Resource<List<Post>>
 
-    suspend fun insertFavPost(post: Post)
+    suspend fun insertNewPosts(vararg posts: Post): Resource<Unit>
+
+    suspend fun changePostFavorite(post: Post): Resource<Unit>
+
+    suspend fun isPostFavorite(postId: Int): Resource<Int>
 
 
 }

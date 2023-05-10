@@ -53,9 +53,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalDB(@ApplicationContext appContext: Context) = Room.databaseBuilder(
+    fun provideLocalDB(@ApplicationContext appContext: Context): AppDatabase = Room.databaseBuilder(
         appContext,
-        AppDatabase::class.java, "database-name"
+        AppDatabase::class.java, "DB_POSTS"
     ).build()
 
 

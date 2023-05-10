@@ -6,10 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.saif.trycartest.R
 import com.saif.trycartest.databinding.FragmentFavoritePostsBinding
+import com.saif.trycartest.domain.models.Post
 import com.saif.trycartest.presentation.adapter.PostAdapter
 import com.saif.trycartest.presentation.core.BaseFragment
+import com.saif.trycartest.presentation.posts.PostsFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +36,12 @@ class FavoritePostsFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.getFavoritePosts()
+    }
+
 
     private fun setUp() {
         setUi()
@@ -40,8 +49,16 @@ class FavoritePostsFragment : BaseFragment() {
     }
 
     private fun setUi() {
-        adapter = PostAdapter()
+        adapter = PostAdapter(::onItemClick)
         binding.rv.adapter = adapter
+    }
+
+    private fun onItemClick(post: Post) {
+        findNavController().navigate(
+            FavoritePostsFragmentDirections.actionFavoritePostsFragmentToPostDetailsFragment(
+                post
+            )
+        )
     }
 
     private fun observeData() {
@@ -54,6 +71,9 @@ class FavoritePostsFragment : BaseFragment() {
             when (it) {
                 is SuccessFavPostsData -> {
                     adapter.submitList(it.data)
+
+                    binding.tvEmptyList.visibility =
+                        if (it.data.isNullOrEmpty()) View.VISIBLE else View.GONE
                 }
             }
         }

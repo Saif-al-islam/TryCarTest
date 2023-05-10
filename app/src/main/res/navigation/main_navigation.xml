@@ -17,13 +17,17 @@
 
     <fragment
         android:id="@+id/favoritePostsFragment"
-        android:name="com.saif.trycartest.FavoritePostsFragment"
+        android:name="com.saif.trycartest.presentation.favoritePosts.FavoritePostsFragment"
         android:label="fragment_favorite_posts"
-        tools:layout="@layout/fragment_favorite_posts" />
+        tools:layout="@layout/fragment_favorite_posts" >
+        <action
+            android:id="@+id/action_favoritePostsFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/postDetailsFragment"
-        android:name="com.saif.trycartest.PostDetailsFragment"
+        android:name="com.saif.trycartest.presentation.postDetails.PostDetailsFragment"
         android:label="fragment_post_details"
         tools:layout="@layout/fragment_post_details" >
         <argument

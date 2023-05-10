@@ -10,9 +10,10 @@ import com.saif.trycartest.R
 import com.saif.trycartest.databinding.ItemPostBinding
 import com.saif.trycartest.domain.models.Post
 
-class PostAdapter : ListAdapter<Post, PostAdapter.ViewHolder>(DiffCallback()) {
+class PostAdapter(
+    private val onItemClick: (Post) -> Unit = {}
+) : ListAdapter<Post, PostAdapter.ViewHolder>(DiffCallback()) {
 
-    var onItemClick: (Post) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
